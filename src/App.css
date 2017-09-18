@@ -23,8 +23,22 @@ body {
   to {
     transform: rotate(360deg); } }
 
-p, li, label, h1 {
+p, li, label, h1, h2 {
   color: white; }
+
+.titleh1 {
+  text-align: center;
+  font-family: 'Rakkas', cursive;
+  margin-bottom: 0; }
+
+.titleh2 {
+  text-align: center;
+  font-family: 'Mogra', cursive;
+  margin-top: 0; }
+
+.center-div {
+  margin: 0 auto;
+  width: 200px; }
 
 .circleGif {
   margin: auto;

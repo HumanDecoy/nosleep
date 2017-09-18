@@ -51,9 +51,11 @@ class Main extends Component {
     render() {
     return (
       <div>
+        
     <Header user={this.state.user} signout={this.signOut}/>
     <Login signin={this.signIn} onChange={this.onChange} onSubmit={this.signIn}/>
     <Register onChange={this.onChange} onSubmit={this.onSubmitNewUser}/>
+    <div className="circleGif"></div>
       </div>
     );
   }
