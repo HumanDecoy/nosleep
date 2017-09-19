@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import firebase from '../firebase.js';
 import Header from '../component/header/Header.js';
+import HeaderIn from '../component/header/HeaderIn.js';
 import Form from '../component/forms/Form.js';
 import Login from '../component/forms/Login.js';
 import Register from '../component/forms/Register.js';
+import ButtonReg from '../component/forms/ButtonReg.js';
 class Main extends Component {
     
     state ={
     username:'',
     password:'',
+    errormsg:'',
+    errormsgreg:'',
+    currentUsername:'',
     user:"",
+    register:""
  }
  componentDidMount(){
     
@@ -31,8 +37,13 @@ class Main extends Component {
         e.preventDefault();
         firebase.auth()
           .createUserWithEmailAndPassword(this.state.username, this.state.password)
-          .then(user => console.log("Created user", user))
-          .catch(error => console.log(error))
+          .then((user) => {
+            firebase
+              .database()
+              .ref(`users/${user.uid}`)
+              .set({ email: user.email, uid: user.uid , username:this.state.currentUsername })
+            })
+          .catch(error => this.setState({errormsgreg:error.message}))
       };
 
       signIn = (e) => {
@@ -40,24 +51,47 @@ class Main extends Component {
         firebase.auth()
           .signInWithEmailAndPassword(this.state.username, this.state.password)
           .then(user => console.log("Signed in !", user))
-          .catch(error => console.log(error));
+          .catch(error => this.setState({errormsg:error.message}));
       }
  
       signOut = (e) => {
         e.preventDefault();
         console.log("SIGN OUT!")
+        this.setState({register:false})
+        this.setState({errormsg:""})
+        this.setState({errormsgreg:""})
         firebase.auth().signOut();
     }
     render() {
-    return (
+    
+    
+    
+      return (
       <div>
         
-    <Header user={this.state.user} signout={this.signOut}/>
-    <Login signin={this.signIn} onChange={this.onChange} onSubmit={this.signIn}/>
-    <Register onChange={this.onChange} onSubmit={this.onSubmitNewUser}/>
-    <div className="circleGif"></div>
+  
+  
+   <Header user={this.state.user} signout={this.signOut}/> 
+      
+  {!this.state.user ?  this.state.register ?  
+  <Register errormsg={this.state.errormsgreg} onChange={this.onChange} onClick={this.onChange} onSubmit={this.onSubmitNewUser}/> : 
+  <Login errormsg={this.state.errormsg} signin={this.signIn} onChange={this.onChange} onSubmit={this.signIn}/>  
+  : null }
+  
+    
+    
+    
+    
+    {/*<div className="circleGif"></div>*/}
       </div>
+    
+  
+  
+    
     );
+  
+  
+  
   }
 }
 

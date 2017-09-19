@@ -1,5 +1,5 @@
 body {
-  background-color: #3E363F; }
+  background-color: #4D444F; }
 
 .App {
   text-align: center; }
@@ -27,18 +27,20 @@ p, li, label, h1, h2 {
   color: white; }
 
 .titleh1 {
-  text-align: center;
   font-family: 'Rakkas', cursive;
-  margin-bottom: 0; }
+  color: #FADFDF; }
 
 .titleh2 {
-  text-align: center;
   font-family: 'Mogra', cursive;
-  margin-top: 0; }
+  color: #FADFDF; }
 
 .center-div {
   margin: 0 auto;
   width: 200px; }
+
+.text-center {
+  justify-content: center;
+  text-align: center; }
 
 .circleGif {
   margin: auto;
@@ -48,8 +50,31 @@ p, li, label, h1, h2 {
   -webkit-border-radius: 100px;
   border-radius: 100px;
   background: url("./sheep2.gif") no-repeat center;
+  background-color: #3E363F;
   background-size: cover;
   border: solid white 2px; }
+
+.Header-div {
+  text-align: center;
+  height: 6rem;
+  border-bottom: 2px solid black; }
+  .Header-div h2 {
+    margin-top: 0; }
+  .Header-div h1 {
+    margin-bottom: 0; }
+
+.main-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  margin: 0 auto;
+  width: 350px; }
+  .main-form input {
+    height: 30px;
+    margin-top: 5px; }
+  .main-form button {
+    height: 30px;
+    margin-top: 5px; }
 
 .navDiv li {
   list-style: none; }
