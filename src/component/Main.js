@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../firebase.js';
 import Header from '../component/header/Header.js';
-import HeaderIn from '../component/header/HeaderIn.js';
-import Form from '../component/forms/Form.js';
 import Login from '../component/forms/Login.js';
 import Register from '../component/forms/Register.js';
-import ButtonReg from '../component/forms/ButtonReg.js';
 class Main extends Component {
     
     state ={
@@ -60,6 +57,8 @@ class Main extends Component {
         this.setState({register:false})
         this.setState({errormsg:""})
         this.setState({errormsgreg:""})
+        this.setState({username:""})
+        this.setState({password:""})
         firebase.auth().signOut();
     }
     render() {

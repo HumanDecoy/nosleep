@@ -1,6 +1,5 @@
 import React from "react";
 import Form from './Form';
-import ButtonReg from './ButtonReg.js';
 
 const Register = (props) => {
   return (
