@@ -15,10 +15,13 @@ const Login = (props) => {
     name2="password" 
     button1="Login" 
     onSubmit={props.onSubmit}
-    onChange={props.onChange}/>
+    onChange={props.onChange}
+    />
+    
     <div className="main-form">
       <h2 className="text-center"> Dont have an account yet?</h2>
           <ButtonReg onChange={props.onChange}/>
+          <button onClick={props.google}> Sign in with google </button>
       </div>
     </div>
   );
