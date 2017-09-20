@@ -3,6 +3,7 @@ import firebase from '../firebase.js';
 import Header from '../component/header/Header.js';
 import Login from '../component/forms/Login.js';
 import Register from '../component/forms/Register.js';
+import Search from '../component/search/Search.js';
 class Main extends Component {
     
     state ={
@@ -11,8 +12,12 @@ class Main extends Component {
     errormsg:'',
     errormsgreg:'',
     currentUsername:'',
-    user:"",
-    register:""
+    user:'',
+    register:'',
+    connected:'',
+    male:'',
+    girl:'',
+
  }
  componentDidMount(){
     
@@ -47,7 +52,9 @@ class Main extends Component {
         }
 
     onChange = (e) => this.setState({[e.target.name]: e.target.value})
- 
+    
+    onChangeChecked = (e) => this.setState({[e.target.name]: e.target.checked})
+    
     onSubmitNewUser = e => {
         e.preventDefault();
         firebase.auth()
@@ -87,6 +94,41 @@ class Main extends Component {
           // ...
         });
       }
+      // Master-blaster-3000-function
+      searchInsomnia = (e) => {
+        e.preventDefault();
+        let searchObj = {
+          male:this.state.male,
+          girl:this.state.girl,
+        }
+           this.checkIfObjectExist(searchObj)
+        
+      }
+
+      checkIfObjectExist = (obj) => {
+
+      }
+
+
+        test = (e) =>{
+          e.preventDefault();
+          console.log(this.state.male)
+          console.log(this.state.girl)
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       signIn = (e) => {
         e.preventDefault();
@@ -125,7 +167,7 @@ class Main extends Component {
   : null }
   
   {this.state.currentUsername && this.state.user ? <p> welcome {this.state.currentUsername} </p>: null}
-    
+  {this.state.currentUsername && this.state.user ? <Search onSubmit={this.test} onChange={this.onChangeChecked}/>:null}
     
     
     
