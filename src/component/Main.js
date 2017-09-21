@@ -4,6 +4,7 @@ import Header from '../component/header/Header.js';
 import Login from '../component/forms/Login.js';
 import Register from '../component/forms/Register.js';
 import Search from '../component/search/Search.js';
+import Loading from '../component/loading/Loading.js';
 class Main extends Component {
     
     state ={
@@ -15,8 +16,10 @@ class Main extends Component {
     user:'',
     register:'',
     connected:'',
-    male:'',
-    girl:'',
+    work:'',
+    energy:'',
+    any:'',
+    searching:'',
 
  }
  componentDidMount(){
@@ -94,27 +97,60 @@ class Main extends Component {
           // ...
         });
       }
-      // Master-blaster-3000-function
+      // FunctionMCFuncFace
       searchInsomnia = (e) => {
         e.preventDefault();
-        let searchObj = {
-          male:this.state.male,
-          girl:this.state.girl,
-        }
-           this.checkIfObjectExist(searchObj)
-        
+      this.setSearchObjects();
+      this.checkForMatch();
+      this.findMatch();
       }
 
-      checkIfObjectExist = (obj) => {
-
+      checkForMatch  = () => {
+        firebase.database().ref('searchObj')
       }
 
+      setSearchObjects = () => {
+        this.state.energy ? firebase.database().ref(`searchObj/energy/${this.state.user.uid}`).set({
+          userId:this.state.user.uid,
+        }): null
+        this.state.work ? firebase.database().ref(`searchObj/work/${this.state.user.uid}`).set({
+          userId:this.state.user.uid,
+        }): null
+      }
 
-        test = (e) =>{
-          e.preventDefault();
-          console.log(this.state.male)
-          console.log(this.state.girl)
+        findMatch = () =>{
+          this.state.energy ? firebase.database().ref(`searchObj/energy`).orderByChild('userId')
+          .equalTo(this.state.user.uid)
+          .on('value', (snapshot) => {
+            if(snapshot.val() !== null) {
+              console.log(snapshot.val());
+              firebase.database().ref(`searchObj/energy`).orderByChild('userId')
+              .on('value',(snapshot) => {
+                console.log(snapshot.val());
+                snapshot.forEach((item) => {
+                  item.val().userId !== this.state.user.uid ?
+                  this.createChatRoom(this.state.user.uid, item.val().userId)
+                  :null
+                })
+            
+          })
+        } else {
+          console.log (snapshot.val()) ;
         }
+      
+        }):null;
+      }
+
+        createChatRoom = (userid1, userid2) => {
+          firebase.database().ref(`chatRooms/${userid1+userid2}`).set({
+            userid1:userid1,
+            userid2:userid2,
+            posts:'',
+          })
+          this.setState({connected:true});
+          this.setState({searching:false});
+        }
+     
 
 
 
@@ -127,10 +163,7 @@ class Main extends Component {
 
 
 
-
-
-
-      signIn = (e) => {
+      signIn = (e) => { 
         e.preventDefault();
         firebase.auth()
           .signInWithEmailAndPassword(this.state.username, this.state.password)
@@ -151,6 +184,9 @@ class Main extends Component {
         firebase.auth().signOut();
        
     }
+      toggleSearch = () => {
+        this.setState({searching:true})
+      }
     render() {
     
     
@@ -161,17 +197,18 @@ class Main extends Component {
   
   
    <Header user={this.state.user} signout={this.signOut}/> 
+  
   {!this.state.user ?  this.state.register ?  
-  <Register errormsg={this.state.errormsgreg} onChange={this.onChange} onClick={this.onChange} onSubmit={this.onSubmitNewUser}/> : 
+  <Register   errormsg={this.state.errormsgreg} onChange={this.onChange} onClick={this.onChange} onSubmit={this.onSubmitNewUser}/> : 
   <Login google={this.signInWithGoogle} errormsg={this.state.errormsg} signin={this.signIn} onChange={this.onChange} onSubmit={this.signIn}/>  
   : null }
   
   {this.state.currentUsername && this.state.user ? <p> welcome {this.state.currentUsername} </p>: null}
-  {this.state.currentUsername && this.state.user ? <Search onSubmit={this.test} onChange={this.onChangeChecked}/>:null}
+  {this.state.currentUsername && this.state.user && !this.state.searching ? <Search onSubmit={this.searchInsomnia} onChange={this.onChangeChecked}/>:null}
+  {this.state.searching && this.state.user ? <Loading onChange={this.onChange}/> : null}
     
     
-    
-    {/*<div className="circleGif"></div>*/}
+
       </div>
     
   

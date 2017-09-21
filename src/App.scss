@@ -56,7 +56,13 @@ text-align: center;
   color:red;
   background-color:white;
 }
-
+.loading{
+  display:flex;
+  flex-direction:column;
+  margin:0 auto;
+  align-content:center;
+  text-align: center;
+}
 .circleGif {
   margin: auto;
   width: 200px;

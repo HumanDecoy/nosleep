@@ -17,6 +17,7 @@ const Register = (props) => {
     button2="Cancel"
     onSubmit={props.onSubmit}
     onChange={props.onChange}
+
     />
   
     </div>

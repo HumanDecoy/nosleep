@@ -21,7 +21,7 @@ const Login = (props) => {
     <div className="main-form">
       <h2 className="text-center"> Dont have an account yet?</h2>
           <ButtonReg onChange={props.onChange}/>
-          <button onClick={props.google}> Sign in with google </button>
+          <button onClick={props.google}> Sign in with Google </button>
       </div>
     </div>
   );
