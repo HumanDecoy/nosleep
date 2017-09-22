@@ -123,12 +123,7 @@ class Main extends Component {
       }
         // Searches for matching preferences
         findMatch = () => { 
-        // CHECK ENERGY
          this.checkEnerg();
-        // CHECK WORK
-         this.state.work && this.checkWork();
-        // CHECK ANY
-        this.state.any &&  this.checkAny();
       }
 
         checkAny = () => {
@@ -150,6 +145,7 @@ class Main extends Component {
               : this.createChatRoom(this.state.user.uid, Object.keys(snapshotAny.val())[1])
               }else{
                 console.log("no match")
+             
               }
             
           })
@@ -185,6 +181,7 @@ class Main extends Component {
             : this.createChatRoom(this.state.user.uid, Object.keys(snapshotWork.val())[1])
             }else{
               console.log("no match")
+              this.checkAny();
             }
           
         })
@@ -192,7 +189,7 @@ class Main extends Component {
         console.log (snapshotWork.val()) ;
       }
     
-      }):null;
+      }):this.checkAny();
 
         }
 
@@ -218,14 +215,16 @@ class Main extends Component {
               : this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[1])
               }else{
                 console.log("no match")
+                this.checkWork();
               }
             
           })
         } else {
+          
           console.log (snapshot.val()) ;
         }
       
-        }):null;
+        }):this.checkWork();
         }
         //Creates chat-object
         createChatRoom = (userid1, userid2) => {
