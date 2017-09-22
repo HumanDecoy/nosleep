@@ -126,12 +126,16 @@ class Main extends Component {
               console.log(snapshot.val());
               firebase.database().ref(`searchObj/energy`).orderByChild('userId')
               .on('value',(snapshot) => {
-                console.log(snapshot.val());
-                snapshot.forEach((item) => {
-                  item.val().userId !== this.state.user.uid ?
-                  this.createChatRoom(this.state.user.uid, item.val().userId)
-                  :null
-                })
+                console.log( Object.keys(snapshot.val())[1]);
+                
+                if(Object.keys(snapshot.val())[1] != null){
+
+                Object.keys(snapshot.val())[0] !== this.state.user.uid ?
+                this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[0])
+              : this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[1])
+              }else{
+                console.log("no match")
+              }
             
           })
         } else {
