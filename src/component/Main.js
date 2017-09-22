@@ -21,6 +21,7 @@ class Main extends Component {
     any:'',
     searching:'',
 
+
  }
  componentDidMount(){
     
@@ -97,9 +98,9 @@ class Main extends Component {
           // ...
         });
       }
-      // FunctionMCFuncFace
+      // FunctionMCFuncFace, calls all the functions to create a chat.
       searchInsomnia = (e) => {
-        e.preventDefault();
+      e.preventDefault();
       this.setSearchObjects();
       this.checkForMatch();
       this.findMatch();
@@ -108,7 +109,7 @@ class Main extends Component {
       checkForMatch  = () => {
         firebase.database().ref('searchObj')
       }
-
+      // Pushes user into correct preferences objects
       setSearchObjects = () => {
         this.state.energy ? firebase.database().ref(`searchObj/energy/${this.state.user.uid}`).set({
           userId:this.state.user.uid,
@@ -116,20 +117,102 @@ class Main extends Component {
         this.state.work ? firebase.database().ref(`searchObj/work/${this.state.user.uid}`).set({
           userId:this.state.user.uid,
         }): null
+        this.state.any ? firebase.database().ref(`searchObj/any/${this.state.user.uid}`).set({
+          userId:this.state.user.uid,
+        }): null
+      }
+        // Searches for matching preferences
+        findMatch = () => { 
+        // CHECK ENERGY
+         this.checkEnerg();
+        // CHECK WORK
+         this.state.work && this.checkWork();
+        // CHECK ANY
+        this.state.any &&  this.checkAny();
       }
 
-        findMatch = () =>{
+        checkAny = () => {
+          this.state.any ? firebase.database().ref(`searchObj/any`).orderByChild('userId')
+          .equalTo(this.state.user.uid)
+          .on('value', (snapshotAny) => {
+            if(snapshotAny.val() !== null) {
+              console.log(snapshotAny.val());
+              firebase.database().ref(`searchObj/any`).orderByChild('userId')
+              .once('value',(snapshotAny) => {
+                if(Object.keys(snapshotAny.val())[1] !== undefined){
+                  this.setState({
+                    energy:false,
+                    work:false,
+                    any:false,
+                  })
+                Object.keys(snapshotAny.val())[0] !== this.state.user.uid ?
+                this.createChatRoom(this.state.user.uid, Object.keys(snapshotAny.val())[0])
+              : this.createChatRoom(this.state.user.uid, Object.keys(snapshotAny.val())[1])
+              }else{
+                console.log("no match")
+              }
+            
+          })
+        } else {
+          console.log (snapshotAny.val()) ;
+        }
+      
+        }):null;
+    
+        }
+
+        checkWork = () => {
+          
+        console.log(this.state.work);
+        this.state.work ? firebase.database().ref(`searchObj/work`).orderByChild('userId')
+        .equalTo(this.state.user.uid)
+        .on('value', (snapshotWork) => {
+          console.log(snapshotWork.val());
+          if(snapshotWork.val() !== null) {
+            console.log(snapshotWork.val());
+            firebase.database().ref(`searchObj/work`).orderByChild('userId')
+            .once('value',(snapshotWork) => {
+        
+              
+              if(Object.keys(snapshotWork.val())[1] !== undefined){
+                this.setState({
+                  energy:false,
+                  work:false,
+                  any:false,
+                })
+              Object.keys(snapshotWork.val())[0] !== this.state.user.uid ?
+              this.createChatRoom(this.state.user.uid, Object.keys(snapshotWork.val())[0])
+            : this.createChatRoom(this.state.user.uid, Object.keys(snapshotWork.val())[1])
+            }else{
+              console.log("no match")
+            }
+          
+        })
+      } else {
+        console.log (snapshotWork.val()) ;
+      }
+    
+      }):null;
+
+        }
+
+
+        checkEnerg = () => {
           this.state.energy ? firebase.database().ref(`searchObj/energy`).orderByChild('userId')
           .equalTo(this.state.user.uid)
           .on('value', (snapshot) => {
             if(snapshot.val() !== null) {
               console.log(snapshot.val());
               firebase.database().ref(`searchObj/energy`).orderByChild('userId')
-              .on('value',(snapshot) => {
+              .once('value',(snapshot) => {
                 console.log( Object.keys(snapshot.val())[1]);
                 
-                if(Object.keys(snapshot.val())[1] != null){
-
+                if(Object.keys(snapshot.val())[1] !== undefined){
+                  this.setState({
+                    energy:'',
+                    work:'',
+                    any:'',
+                  })
                 Object.keys(snapshot.val())[0] !== this.state.user.uid ?
                 this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[0])
               : this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[1])
@@ -143,18 +226,37 @@ class Main extends Component {
         }
       
         }):null;
-      }
-
+        }
+        //Creates chat-object
         createChatRoom = (userid1, userid2) => {
           firebase.database().ref(`chatRooms/${userid1+userid2}`).set({
             userid1:userid1,
             userid2:userid2,
             posts:'',
           })
-          this.setState({connected:true});
-          this.setState({searching:false});
+          this.clearDB(userid1,userid2);
+          this.setState({
+            searching:false,
+            connected:true,
+          
+          });
+
         }
      
+        // Deletes user/users from DB 
+        clearDB = (user1, user2) => {
+          // DELETE ALL IN ENERGY
+          firebase.database().ref(`searchObj/energy/${user1}`).remove();
+          firebase.database().ref(`searchObj/energy/${user2}`).remove();
+          //DELETE ALL IN WORK
+          firebase.database().ref(`searchObj/work/${user1}`).remove();
+          firebase.database().ref(`searchObj/work/${user2}`).remove();
+          //DELETE ALL IN ANY
+          firebase.database().ref(`searchObj/any/${user1}`).remove();
+          firebase.database().ref(`searchObj/any/${user2}`).remove();
+          
+
+        }
 
 
 
