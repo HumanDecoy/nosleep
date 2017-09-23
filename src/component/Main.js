@@ -57,7 +57,7 @@ class Main extends Component {
 
     onChange = (e) => this.setState({[e.target.name]: e.target.value})
     
-    onChangeChecked = (e) => this.setState({[e.target.name]: e.target.checked})
+    onChangeChecked = (e) =>   this.setState({[e.target.name]: e.target.checked})
     
     onSubmitNewUser = e => {
         e.preventDefault();
@@ -67,7 +67,7 @@ class Main extends Component {
             firebase
               .database()
               .ref(`users/${user.uid}`)
-              .set({ email: user.email, uid: user.uid , username:this.state.currentUsername })
+              .set({ email: user.email, uid: user.uid , username:this.state.currentUsername , chatroom:'' })
             })
           .catch(error => this.setState({errormsgreg:error.message}))
       };
@@ -233,6 +233,10 @@ class Main extends Component {
             userid2:userid2,
             posts:'',
           })
+          // SETS CHATROOM FOR PLAYER 1 , WILL SET CHATROOM FOR PLAYER 2.
+          firebase.database().ref(`users/${userid1}`).update({
+           chatroom:"TESTING",
+          })
           this.clearDB(userid1,userid2);
           this.setState({
             searching:false,
@@ -309,7 +313,7 @@ class Main extends Component {
   : null }
   
   {this.state.currentUsername && this.state.user ? <p> welcome {this.state.currentUsername} </p>: null}
-  {this.state.currentUsername && this.state.user && !this.state.searching ? <Search onSubmit={this.searchInsomnia} onChange={this.onChangeChecked}/>:null}
+  {this.state.currentUsername && this.state.user && !this.state.searching ? <Search onSubmit={this.searchInsomnia}  onChange={this.onChangeChecked}/>:null}
   {this.state.searching && this.state.user ? <Loading onChange={this.onChange}/> : null}
     
     
