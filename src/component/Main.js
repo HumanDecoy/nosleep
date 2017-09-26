@@ -22,7 +22,7 @@ class Main extends Component {
     energy:'',
     any:'',
     searching:"",
-    chat:[],
+    chat:'',
     posttext:'',
 
 
@@ -358,7 +358,7 @@ class Main extends Component {
           energy:'',
           any:'',
           searching:"",
-          chat:[],
+          chat:'',
           posttext:'',
         })
         firebase.auth().signOut();
@@ -367,13 +367,20 @@ class Main extends Component {
      leaveChat = () => {
       this.clearDB(this.state.user.uid);
       this.clearChatrooms(this.state.user.uid);
+      this.clearDB();
+      this.forceUpdate()
        this.setState({
          connected:'',
-         chat:[],
+         chat:'',
          posttext:'',
+         register:'',
+         connected:'',
+         work:'',
+         energy:'',
+         any:'',
       
       })
-       this.clearDB();
+  
      }
 
      noSearch = () => {
@@ -390,7 +397,7 @@ class Main extends Component {
       }
       
     render() {
- 
+    
       const renderPost = [...this.state.chat].map((elem)=>{
         var userName = '';
         console.log(elem.val.userId);
@@ -401,7 +408,7 @@ class Main extends Component {
         console.log(userName);
         console.log(elem.val.userId)
         console.log(elem.val.text)
-         return <PostCard username={userName} posttext={elem.val.text} />
+         return <PostCard myName={this.state.currentUsername} username={userName} posttext={elem.val.text} />
 
     });
     

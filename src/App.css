@@ -74,6 +74,36 @@ p, li, label, h1, h2 {
   .Header-div h1 {
     margin: 0; }
 
+.main-form-posts {
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 15px;
+  margin: 0 auto;
+  max-width: 60em;
+  min-height: 60em;
+  flex-direction: column-reverse;
+  background-color: #3E363F; }
+
+.chatMe {
+  background-color: lightcoral;
+  border: black 1px solid;
+  margin-right: 5em;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 15px; }
+  .chatMe p, .chatMe h2 {
+    margin: 10px; }
+
+.chatOther {
+  background-color: cornflowerblue;
+  border: black 1px solid;
+  margin-left: 5em;
+  margin-top: 10px;
+  margin-right: 10px;
+  border-radius: 15px; }
+  .chatOther p, .chatOther h2 {
+    margin: 10px; }
+
 .main-form {
   display: flex;
   flex-direction: column;
