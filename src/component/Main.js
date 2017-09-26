@@ -281,7 +281,6 @@ class Main extends Component {
                 this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[0])
               : this.createChatRoom(this.state.user.uid, Object.keys(snapshot.val())[1])
               }else{
-                console.log("no match")
                 this.checkWork();
               }
             
@@ -300,7 +299,7 @@ class Main extends Component {
             userid2:userid2,
             posts:'',
           })
-          // SETS CHATROOM FOR PLAYER 1 , WILL SET CHATROOM FOR PLAYER 2. USE child_changed
+          // SETS CHATROOM FOR USERS
           firebase.database().ref(`users/${userid1}`).update({
            chatroom:userid1+userid2,
           })
