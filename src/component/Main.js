@@ -232,6 +232,7 @@ class Main extends Component {
               console.log(snapshotAny.val());
               firebase.database().ref(`searchObj/any`).orderByChild('userId')
               .once('value',(snapshotAny) => {
+                if(snapshotAny.val() !== null){
                 if(Object.keys(snapshotAny.val())[1] !== undefined){
                   this.setState({
                     energy:false,
@@ -246,7 +247,7 @@ class Main extends Component {
                 console.log("no match")
              
               }
-            
+            }
           })
         } else {
           console.log (snapshotAny.val()) ;
@@ -267,7 +268,7 @@ class Main extends Component {
             console.log(snapshotWork.val());
             firebase.database().ref(`searchObj/work`).orderByChild('userId')
             .once('value',(snapshotWork) => {
-        
+        if(snapshotWork.val() !== null){
               
               if(Object.keys(snapshotWork.val())[1] !== undefined){
                 this.setState({
@@ -283,7 +284,7 @@ class Main extends Component {
               console.log("no match")
               this.checkAny();
             }
-          
+          }
         })
       } else {
         console.log (snapshotWork.val()) ;
@@ -301,6 +302,7 @@ class Main extends Component {
             if(snapshot.val() !== null) {
               firebase.database().ref(`searchObj/energy`).orderByChild('userId')
               .once('value',(snapshot) => {
+                if(snapshot.val() !== null){
                 
                 if(Object.keys(snapshot.val())[1] !== undefined){
                   this.setState({
@@ -315,7 +317,7 @@ class Main extends Component {
               }else{
                 this.checkWork();
               }
-            
+            }
           })
         } else {
           
@@ -398,23 +400,20 @@ class Main extends Component {
        
     }
      leaveChat = () => {
+      this.setState({
+        connected:'',
+        chat:'',
+        posttext:'',
+        register:'',
+        connected:'',
+        work:'',
+        energy:'',
+        any:'',
+        user2:'',
+        errorSearch:'',
+     })
       this.clearDB(this.state.user.uid);
       this.clearChatrooms(this.state.user.uid);
-      this.clearDB();
-      this.forceUpdate()
-       this.setState({
-         connected:'',
-         chat:'',
-         posttext:'',
-         register:'',
-         connected:'',
-         work:'',
-         energy:'',
-         any:'',
-         user2:'',
-         errorSearch:'',
-      
-      })
   
      }
 
