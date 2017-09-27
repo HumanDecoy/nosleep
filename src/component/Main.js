@@ -436,10 +436,10 @@ class Main extends Component {
       }
       
     render() {
-    
+    // Renderar ut nya posts i chat
       const renderPost = [...this.state.chat].map((elem)=>{
-       console.log(elem);
-       return <PostCard myKey={this.state.user.uid} rKey={elem.val.userId} username={this.state.currentUsername} user2={this.state.user2} posttext={elem.val.text} />
+       console.log(elem.key);
+       return  <PostCard myKey={this.state.user.uid} rKey={elem.val.userId} username={this.state.currentUsername} user2={this.state.user2} posttext={elem.val.text} />
         })
 
         
