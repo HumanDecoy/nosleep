@@ -8,7 +8,7 @@ const Chatroom = (props) => {
   
   <form  className="main-form" onSubmit={props.onSubmit}>
   <label htmlFor="text">Message:</label>
-   <input name ={props.name} type='text' onChange={props.onChange}/>
+   <input value={props.posttext} name ={props.name} type='text' onChange={props.onChange}/>
    <input type="submit" value="send"/>
    <button onClick={props.exit}> Exit chatroom </button>
      </form>

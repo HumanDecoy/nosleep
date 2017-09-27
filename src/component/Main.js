@@ -7,6 +7,7 @@ import Search from '../component/search/Search.js';
 import Loading from '../component/loading/Loading.js';
 import Chatroom from '../component/chatroom/Chatroom.js';
 import PostCard from '../component/chatroom/PostCard.js';
+
 class Main extends Component {
     
     state ={
@@ -24,6 +25,8 @@ class Main extends Component {
     searching:"",
     chat:'',
     posttext:'',
+    user2:'',
+    errorSearch:'',
 
 
  }
@@ -53,7 +56,22 @@ class Main extends Component {
                 // Listens to DB if user is connected : 
        firebase.database().ref(`users/${this.state.user.uid}/chatroom`).on("value", (snapshot) => {
        if (snapshot.val()){
+        firebase.database().ref(`chatRooms/${snapshot.val()}`).once('value',(innersnapshot)=> {
+          if(innersnapshot.val().userid1 === this.state.user.uid){
+            firebase.database().ref(`users/${innersnapshot.val().userid2}`).once('value',(inceptionsnap)=>{
+              console.log(inceptionsnap.val().username)
+              this.setState({user2:inceptionsnap.val().username})
+            })
+          }
+          else{
+            firebase.database().ref(`users/${innersnapshot.val().userid1}`).once('value',(inceptionsnap)=>{
+              console.log(inceptionsnap.val().username)
+              this.setState({user2:inceptionsnap.val().username})
+            })
+          }
+        })
          var result = snapshot.val();
+         
           this.setState({
             connected:result,
             searching:false,
@@ -79,13 +97,13 @@ class Main extends Component {
            console.log("not TRUE ");
            this.setState({connected:''})
            console.log(this.state.connected)
+           
         
        }
        
  
       });
-            
-               } 
+                   } 
                // If failed to log in , dont set user or logout
                else{
             this.setState({user:''})
@@ -99,27 +117,25 @@ class Main extends Component {
         }
 
 
-    onChildAdded = () => {
-       
-   
- 
-            }
-            
-
     onChange = (e) => this.setState({[e.target.name]: e.target.value})
     
     onChangeChecked = (e) =>   this.setState({[e.target.name]: e.target.checked})
     
     onSubmitChat = (e) =>{
       e.preventDefault();
+
       firebase.database().ref(`chatRooms/${this.state.connected}/posts`).push(
         {
         text:this.state.posttext,
         userId:this.state.user.uid,
         }
-
-
       )
+      .then (()=> {
+        this.setState({
+          posttext:'',
+        })
+      })
+     
     }
 
 
@@ -166,11 +182,27 @@ class Main extends Component {
       // FunctionMCFuncFace, calls all the functions to create a chat.
       searchInsomnia = (e) => {
       e.preventDefault();
-      this.toggleSearch();
-      this.setSearchObjects();
-      this.checkForMatch();
-      this.findMatch();
+      if(!this.state.energy && !this.state.work && !this.state.any) {
+        console.log("NEIN");
+        this.setState({
+          errorSearch:true,
+        })
+       
+        
+
       }
+    
+      else{
+        this.toggleSearch();
+        this.setSearchObjects();
+        this.checkForMatch();
+        this.findMatch();
+        this.setState({
+          errorSearch:'',
+      })
+       
+      }
+    }
 
       checkForMatch  = () => {
         firebase.database().ref('searchObj')
@@ -359,6 +391,8 @@ class Main extends Component {
           searching:"",
           chat:'',
           posttext:'',
+          user2:'',
+          errorSearch:'',
         })
         firebase.auth().signOut();
        
@@ -377,6 +411,8 @@ class Main extends Component {
          work:'',
          energy:'',
          any:'',
+         user2:'',
+         errorSearch:'',
       
       })
   
@@ -388,6 +424,10 @@ class Main extends Component {
       this.setState({
         connected:'',
         searching:'',
+        user2:'',
+        work:'',
+        energy:'',
+        any:'',
       })
      }
 
@@ -398,33 +438,27 @@ class Main extends Component {
     render() {
     
       const renderPost = [...this.state.chat].map((elem)=>{
-        var userName = '';
-        console.log(elem.val.userId);
-        firebase.database().ref(`users/${elem.val.userId}`).once('value', (snapshot) => {
-         userName = snapshot.val().username;
-         console.log(userName);
+       console.log(elem);
+       return <PostCard myKey={this.state.user.uid} rKey={elem.val.userId} username={this.state.currentUsername} user2={this.state.user2} posttext={elem.val.text} />
         })
-        console.log(userName);
-        console.log(elem.val.userId)
-        console.log(elem.val.text)
-         return <PostCard myName={this.state.currentUsername} username={userName} posttext={elem.val.text} />
 
-    });
+        
+    
     
       return (
       <div>
         
   
   
-   <Header user={this.state.user} signout={this.signOut}/> 
+   <Header username={this.state.currentUsername} user={this.state.user} signout={this.signOut}/> 
   
   {!this.state.user ?  this.state.register ?  
   <Register   errormsg={this.state.errormsgreg} onChange={this.onChange} onClick={this.onChange} onSubmit={this.onSubmitNewUser}/> : 
   <Login google={this.signInWithGoogle} errormsg={this.state.errormsg} signin={this.signIn} onChange={this.onChange} onSubmit={this.signIn}/>  
   : null }
   {this.state.currentUsername && this.state.user ? <p> welcome {this.state.currentUsername} </p>: null}
-  {this.state.connected ? <Chatroom  onSubmit={this.onSubmitChat} name="posttext" onChange={this.onChange} exit={this.leaveChat} posts={renderPost} p2="anotherOne"/> : null}
-  {this.state.currentUsername && this.state.user && !this.state.searching && !this.state.connected ? <Search onSubmit={this.searchInsomnia}  onChange={this.onChangeChecked}/>:null}
+  {this.state.connected ? <Chatroom  onSubmit={this.onSubmitChat} posttext={this.state.posttext}  name="posttext" onChange={this.onChange} exit={this.leaveChat} posts={renderPost} p2={this.state.user2}/> : null}
+  {this.state.currentUsername && this.state.user && !this.state.searching && !this.state.connected ? <Search  error={this.state.errorSearch}onSubmit={this.searchInsomnia}  onChange={this.onChangeChecked}/>:null}
   {this.state.searching && this.state.user ? <Loading  onClick={this.noSearch}/> : null}
 
     

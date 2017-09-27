@@ -44,7 +44,8 @@ p, li, label, h1, h2 {
 
 .error {
   color: red;
-  background-color: white; }
+  background-color: white;
+  text-align: center; }
 
 .loading {
   display: flex;
@@ -84,23 +85,45 @@ p, li, label, h1, h2 {
   flex-direction: column-reverse;
   background-color: #3E363F; }
 
+.darkred {
+  color: black;
+  background-color: darkred;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  height: 30px;
+  border-radius: 5px; }
+
+.wrapper-chat {
+  width: 100%; }
+
 .chatMe {
   background-color: lightcoral;
   border: black 1px solid;
+  width: 60%;
+  max-width: 40em;
+  float: left;
   margin-right: 5em;
   margin-left: 10px;
   margin-top: 10px;
   border-radius: 15px; }
+  .chatMe p {
+    font-size: 28px; }
   .chatMe p, .chatMe h2 {
     margin: 10px; }
 
 .chatOther {
   background-color: cornflowerblue;
   border: black 1px solid;
+  width: 60%;
+  max-width: 40em;
+  float: right;
   margin-left: 5em;
   margin-top: 10px;
   margin-right: 10px;
   border-radius: 15px; }
+  .chatOther p {
+    font-size: 28px; }
   .chatOther p, .chatOther h2 {
     margin: 10px; }
 
@@ -116,6 +139,11 @@ p, li, label, h1, h2 {
   .main-form button {
     height: 30px;
     margin-top: 5px; }
+
+.cancelBTN {
+  margin-top: 30px;
+  height: 35px;
+  border-radius: 15px; }
 
 .navDiv li {
   list-style: none; }

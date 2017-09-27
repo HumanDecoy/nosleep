@@ -3,8 +3,9 @@ import React from 'react';
 
 const Search = (props) => {
     return (
-      <form  className="main-form" onSubmit={props.onSubmit}>
+      <form  className="main-form" onSubmit={props.onSubmit}>       
         <h2> Reason for insomnia : </h2>
+        {props.error && <h3 className="error"> Please select at least one option: </h3>}
         <label htmlFor="Any Reason">Any Reason</label>
         <input name="any" type = "checkbox" value = "any" onChange = {props.onChange} />
         <label htmlFor="work">Work Issues</label>
