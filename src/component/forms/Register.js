@@ -7,6 +7,7 @@ const Register = (props) => {
          <div className="main-form ">
       <h2 className="text-center"> Register</h2>
       <h3 className="error">{props.errormsg} </h3>
+      <h3 className="error">{props.erroruser}</h3>
       </div>
     <Form 
     formName='register' 
@@ -17,6 +18,7 @@ const Register = (props) => {
     button2="Cancel"
     onSubmit={props.onSubmit}
     onChange={props.onChange}
+    onClick={props.onClick}
 
     />
   

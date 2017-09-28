@@ -15,7 +15,7 @@ const Form = (props) => {
             <input name ={props.name3} type='text' onChange={props.onChange}/> }
             <input type="submit" value ={props.button1} onClick={props.onSubmit} />
             {props.formName === 'register' && 
-            <button name="register" value="" onClick={props.onChange}>Cancel</button>}
+            <button name="register" value="" onClick={props.onClick}>Cancel</button>}
             </form>
             </div>
 
